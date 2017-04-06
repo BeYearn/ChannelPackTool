@@ -14,7 +14,7 @@ public class MainTools {
 	private static String gameApkName;
 	private static String configPath;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 
 		System.out.println("Package tools is starting... ***===================================***");
 
