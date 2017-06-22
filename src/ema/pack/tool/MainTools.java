@@ -9,10 +9,11 @@ import ema.pack.tool.channel.YybChannel;
 
 public class MainTools {
 
-	public static String[] attrChannel;
-	public static String channelStr;
-	private static String gameApkName;
-	private static String configPath;
+	public static String[] attrChannel;  //String[cp,uc,4399...]
+	public static String channelStr;     // String  cp,uc,4399...
+	private static String gameApkName;    //ProXEma-production.apk
+	private static String configPath;     //D:\packages\xzyx\configuration
+	private static String sourcesPath;   //D:\packages\xzyx\sources
 
 	public static void main(String[] args) { 
 
@@ -22,22 +23,31 @@ public class MainTools {
 		// callDosLine1();
 		deCodeApk();
 
-		System.out.println("2.step:  ------------------------------");
-		// 反编译后 先进行py的复制替换操作，再修改manifest文件
+		System.out.println("2.step:  python copy------------------------------");
+		// 反编译后 先进行python的复制替换操作，再修改manifest文件
 		changeDecodeFile();
-
-		System.out.println("3.step: fix manifest ------------------------------");
+		
+		// 在python已经替换、覆盖好后，再将source中的value值补充添加到输出目录
+		System.out.println("3.step: combine <<value>> file!------------------------------");
 		CommonChannel commonChannel = new CommonChannel();
+		commonChannel.combineValueFile(channelStr, gameApkName, configPath);
+
+		System.out.println("4.step: fix manifest ------------------------------");
 		commonChannel.fixed(channelStr, gameApkName, configPath);
 
-		System.out.println("4.step: apktool build ------------------------------");
+		System.out.println("5.step: apktool build ------------------------------");
 		// 回编
 		apktoolBuild();
 		
-		System.out.println("5.step: add sign  ------------------------------");
+		System.out.println("6.step: add sign  ------------------------------");
 		// 签名apk
 		generateSignApk();
 		
+		
+		//___________________________________________________just for test__________________________________________________________________________________________________________
+		//System.out.println("3.step: combine ids.xml & public.xml------------------------------");
+		//CommonChannel commonChannel = new CommonChannel();
+		//commonChannel.combineIds("bs", "ProXEma-production_new.apk", "D:\\packages\\xzyx\\configuration");
 	}
 
 	private static void generateSignApk() {
@@ -109,7 +119,7 @@ public class MainTools {
 			System.out.print("Please input decoded gameApks path(absolute path):");
 			String gameApkPath = CommonTool.valueInput();
 
-			String sourcesPath = gameApkPath.substring(0, gameApkPath.lastIndexOf("\\"));
+			sourcesPath = gameApkPath.substring(0, gameApkPath.lastIndexOf("\\"));
 
 			configPath = sourcesPath.replace("sources", "configuration");
 

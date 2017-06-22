@@ -71,6 +71,7 @@ public class CommonTool {
 
 	/**
 	 * 实时打印dos返回信息
+	 * 
 	 * @param process
 	 */
 	public static void outputDosMes(Process process) {
@@ -93,8 +94,9 @@ public class CommonTool {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void Log(String s){
-		System.out.println("###"+s+"###");
+
+	public static void Log(String s) {
+		System.out.println("###" + s + "###");
 	}
+
 }
