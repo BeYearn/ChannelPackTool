@@ -261,7 +261,6 @@ public class CommonChannel {
 		return maxId;
 	}
 
-
 	public static List<Map<String, String>> updateFileData() throws Exception {
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		// 得到解析器
@@ -347,12 +346,17 @@ public class CommonChannel {
 	 */
 	public void fixed(String channelStr, String gameApkName, String configPath) {
 
+		String shorApkName = gameApkName.replace(".apk", "");
+
 		String[] attrChannel = channelStr.split(",");
 
 		// String configurationPath="D:\\packages\\cydzz\\configuration";
 		String configurationPath = configPath;
 		// String outputChannelPath="D:\\packages\\cydzz";
 		String outputChannelPath = configurationPath.replace("\\configuration", "");
+
+		// "D:\\packages\\cydzz\\configuration\\channel-icon";
+		String channelIconPath = configurationPath + "\\channel-icon";
 
 		// 创建saxReader对象
 		SAXReader reader = new SAXReader();
@@ -384,11 +388,19 @@ public class CommonChannel {
 			Element rootNode = document.getRootElement();
 			Element configRootNode = configDoc.getRootElement();
 
-			// 得到配置文件的包名 渠道号
+			// 得到配置文件的 包名 渠道号 和 需要修改的渠道icon名(有可能空)
 			Attribute configPackageAttr = configRootNode.attribute("package");
 			String packageName = configPackageAttr.getValue();
+
 			Attribute configChannelidAttr = configRootNode.attribute("channelid");
 			String channelId = configChannelidAttr.getValue();
+
+			String channelIcon = "";
+			Attribute configChannelIconAttr = configRootNode.attribute("channelIcon");
+			if (configChannelIconAttr != null) {
+				channelIcon = configChannelIconAttr.getValue();
+			}
+
 			// 设置包名
 			Attribute packageAttr = rootNode.attribute("package");
 			packageAttr.setValue(packageName);
@@ -400,6 +412,25 @@ public class CommonChannel {
 																		// 为何用："android:value"
 																		// 获取不到（null），只能用1（第二个）来获取到
 			appidAtr.setValue(channelId);
+
+			// 修改channelIcon
+			if (null != channelIcon || "" != channelIcon) {
+				// "D:\\packages\\cydzz\\configuration\\channel-icon"; +"\\4399"
+				String iconFileStr = channelIconPath + "\\" + attrChannel[i].trim();
+				File iconFile = new File(iconFileStr);
+				if (iconFile.exists()) {
+					// 改清单文件的appIconn名字
+					Element appELe = rootNode.element("application");
+					Attribute iconAtr = appELe.attribute("icon");   // 之所以不是"android:icon"的原因是命名空间 否则null
+					iconAtr.setValue("@drawable/"+channelIcon);
+					
+					// 将对应icon拷入输出目录
+					String targetDirName = outputChannelPath + "\\" + attrChannel[i].trim() + "\\" + shorApkName
+							+ "\\res";
+					CommonTool.copyDir(iconFileStr, targetDirName);
+				}
+			}
+
 			// 修改环境
 			// 修改tag等
 
