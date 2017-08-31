@@ -61,19 +61,21 @@ public class CommonChannel {
 						} else {
 							System.out.println("文件:" + sFile.getAbsolutePath());
 							// 开始往end包value下文件插入
-							for (File eFile : endFiles) {
-								if (sFile.getName().equals(eFile.getName())) { // 遇到文件名字相同的开始插
-									if (sFile.getName().contains("public")) {
-										// 那就上面蛋疼的插法
-										System.out.println("dan teng cha fa");
-										publicInsert(sFile, eFile);
-									} else {
-										// 名字不同就插
-										System.out.println("normal cha fa");
-										normalInsert(sFile, eFile);
+							//if(endFiles!=null){
+								for (File eFile : endFiles) {
+									if (sFile.getName().equals(eFile.getName())) { // 遇到文件名字相同的开始插
+										if (sFile.getName().contains("public")) {
+											// 那就上面蛋疼的插法
+											System.out.println("dan teng cha fa");
+											publicInsert(sFile, eFile);
+										} else {
+											// 名字不同就插
+											System.out.println("normal cha fa");
+											normalInsert(sFile, eFile);
+										}
 									}
 								}
-							}
+							//}
 						}
 					}
 				}
@@ -215,7 +217,7 @@ public class CommonChannel {
 				}
 				CommonTool.writer(documentEnd, documentEndFile);
 			} else {
-				System.out.println("有相同的Name");
+				//System.out.println("有相同的Name");
 			}
 		}
 		// 当前节点下面子节点迭代器
@@ -413,17 +415,18 @@ public class CommonChannel {
 																		// 获取不到（null），只能用1（第二个）来获取到
 			appidAtr.setValue(channelId);
 
-			// 修改channelIcon
-			if (null != channelIcon || "" != channelIcon) {
+			// 修改channelIcon(当xxConfig中的channelIcon有值时,才改iconname并复制对应icon)
+			if (null != channelIcon && "" != channelIcon) {
+				
+				// 改清单文件的appIconn名字
+				Element appELe = rootNode.element("application");
+				Attribute iconAtr = appELe.attribute("icon");   // 之所以不是"android:icon"的原因是命名空间 否则null
+				iconAtr.setValue("@drawable/"+channelIcon);
+				
 				// "D:\\packages\\cydzz\\configuration\\channel-icon"; +"\\4399"
 				String iconFileStr = channelIconPath + "\\" + attrChannel[i].trim();
 				File iconFile = new File(iconFileStr);
 				if (iconFile.exists()) {
-					// 改清单文件的appIconn名字
-					Element appELe = rootNode.element("application");
-					Attribute iconAtr = appELe.attribute("icon");   // 之所以不是"android:icon"的原因是命名空间 否则null
-					iconAtr.setValue("@drawable/"+channelIcon);
-					
 					// 将对应icon拷入输出目录
 					String targetDirName = outputChannelPath + "\\" + attrChannel[i].trim() + "\\" + shorApkName
 							+ "\\res";
