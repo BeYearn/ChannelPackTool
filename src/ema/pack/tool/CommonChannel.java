@@ -415,14 +415,10 @@ public class CommonChannel {
 																		// 获取不到（null），只能用1（第二个）来获取到
 			appidAtr.setValue(channelId);
 
-			// 修改channelIcon(当xxConfig中的channelIcon有值时,才改iconname并复制对应icon)
+			// 修改channelIcon
+			//(当xxConfig中的channelIcon有值时,才改iconname并复制对应icon)
+			// 更新 当xxConfig中的channelIcon有值 且 那个文件夹存在时才改名和复制drawable
 			if (null != channelIcon && "" != channelIcon) {
-				
-				// 改清单文件的appIconn名字
-				Element appELe = rootNode.element("application");
-				Attribute iconAtr = appELe.attribute("icon");   // 之所以不是"android:icon"的原因是命名空间 否则null
-				iconAtr.setValue("@drawable/"+channelIcon);
-				
 				// "D:\\packages\\cydzz\\configuration\\channel-icon"; +"\\4399"
 				String iconFileStr = channelIconPath + "\\" + attrChannel[i].trim();
 				File iconFile = new File(iconFileStr);
@@ -431,6 +427,11 @@ public class CommonChannel {
 					String targetDirName = outputChannelPath + "\\" + attrChannel[i].trim() + "\\" + shorApkName
 							+ "\\res";
 					CommonTool.copyDir(iconFileStr, targetDirName);
+					
+					// 改清单文件的appIconn名字
+					Element appELe = rootNode.element("application");
+					Attribute iconAtr = appELe.attribute("icon");   // 之所以不是"android:icon"的原因是命名空间 否则null
+					iconAtr.setValue("@drawable/"+channelIcon);
 				}
 			}
 
