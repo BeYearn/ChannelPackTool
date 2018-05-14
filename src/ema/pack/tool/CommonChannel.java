@@ -61,21 +61,21 @@ public class CommonChannel {
 						} else {
 							System.out.println("文件:" + sFile.getAbsolutePath());
 							// 开始往end包value下文件插入
-							//if(endFiles!=null){
-								for (File eFile : endFiles) {
-									if (sFile.getName().equals(eFile.getName())) { // 遇到文件名字相同的开始插
-										if (sFile.getName().contains("public")) {
-											// 那就上面蛋疼的插法
-											System.out.println("dan teng cha fa");
-											publicInsert(sFile, eFile);
-										} else {
-											// 名字不同就插
-											System.out.println("normal cha fa");
-											normalInsert(sFile, eFile);
-										}
+							// if(endFiles!=null){
+							for (File eFile : endFiles) {
+								if (sFile.getName().equals(eFile.getName())) { // 遇到文件名字相同的开始插
+									if (sFile.getName().contains("public")) {
+										// 那就上面蛋疼的插法
+										System.out.println("dan teng cha fa");
+										publicInsert(sFile, eFile);
+									} else {
+										// 名字不同就插
+										System.out.println("normal cha fa");
+										normalInsert(sFile, eFile);
 									}
 								}
-							//}
+							}
+							// }
 						}
 					}
 				}
@@ -217,7 +217,7 @@ public class CommonChannel {
 				}
 				CommonTool.writer(documentEnd, documentEndFile);
 			} else {
-				//System.out.println("有相同的Name");
+				// System.out.println("有相同的Name");
 			}
 		}
 		// 当前节点下面子节点迭代器
@@ -416,7 +416,7 @@ public class CommonChannel {
 			appidAtr.setValue(channelId);
 
 			// 修改channelIcon
-			//(当xxConfig中的channelIcon有值时,才改iconname并复制对应icon)
+			// (当xxConfig中的channelIcon有值时,才改iconname并复制对应icon)
 			// 更新 当xxConfig中的channelIcon有值 且 那个文件夹存在时才改名和复制drawable
 			if (null != channelIcon && "" != channelIcon) {
 				// "D:\\packages\\cydzz\\configuration\\channel-icon"; +"\\4399"
@@ -427,11 +427,12 @@ public class CommonChannel {
 					String targetDirName = outputChannelPath + "\\" + attrChannel[i].trim() + "\\" + shorApkName
 							+ "\\res";
 					CommonTool.copyDir(iconFileStr, targetDirName);
-					
+
 					// 改清单文件的appIconn名字
 					Element appELe = rootNode.element("application");
-					Attribute iconAtr = appELe.attribute("icon");   // 之所以不是"android:icon"的原因是命名空间 否则null
-					iconAtr.setValue("@drawable/"+channelIcon);
+					Attribute iconAtr = appELe.attribute("icon"); // 之所以不是"android:icon"的原因是命名空间
+																	// 否则null
+					iconAtr.setValue("@drawable/" + channelIcon);
 				}
 			}
 

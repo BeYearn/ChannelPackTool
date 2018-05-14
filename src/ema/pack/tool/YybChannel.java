@@ -1,4 +1,4 @@
-package ema.pack.tool.channel;
+package ema.pack.tool;
 
 import java.io.File;
 import java.util.Iterator;
@@ -10,10 +10,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import ema.pack.tool.CommonChannel;
-import ema.pack.tool.CommonTool;
-
-public class YybChannel extends CommonChannel{
+public class YybChannel extends CommonChannel {
 
 	public YybChannel() {
 		// TODO Auto-generated constructor stub

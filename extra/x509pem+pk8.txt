@@ -18,3 +18,14 @@ java -jar signapk.jar my.x509.pem my.pk8 Demo.apk Demo_signed.apk
 
         查循APK是否优化过：
         zipalign -c -v 4 Demo.apk
+        
+        
+        
+        
+        
+        
+        
+        
+apktool的使用
+apktool d -r xxx.apk
+apktool b xxx
